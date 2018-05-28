@@ -1,0 +1,993 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>TProtocol Specification, version 1</title>
+<!-- 2018-05-28 一 22:47 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="style_org.css" />
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">TProtocol Specification, version 1</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1. Introduction</a></li>
+<li><a href="#sec-2">2. The communication model</a>
+<ul>
+<li><a href="#sec-2-1">2.1. Definitions of terms</a></li>
+<li><a href="#sec-2-2">2.2. Overview</a></li>
+<li><a href="#sec-2-3">2.3. Message functions &amp; representations</a>
+<ul>
+<li><a href="#sec-2-3-1">2.3.1. Message functions</a></li>
+<li><a href="#sec-2-3-2">2.3.2. Representing messages</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-4">2.4. Entities</a>
+<ul>
+<li><a href="#sec-2-4-1">2.4.1. Internal entities</a></li>
+<li><a href="#sec-2-4-2">2.4.2. External entities</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-5">2.5. Retrieving external entities</a></li>
+<li><a href="#sec-2-6">2.6. Representing entities</a></li>
+<li><a href="#sec-2-7">2.7. Example</a></li>
+</ul>
+</li>
+<li><a href="#sec-3">3. The format</a>
+<ul>
+<li><a href="#sec-3-1">3.1. The basic message format</a></li>
+<li><a href="#sec-3-2">3.2. Schema for TProtocol messages</a>
+<ul>
+<li><a href="#sec-3-2-1">3.2.1. The "NIL" message</a></li>
+<li><a href="#sec-3-2-2">3.2.2. Greeting messages</a></li>
+<li><a href="#sec-3-2-3">3.2.3. Request messages</a></li>
+</ul>
+</li>
+<li><a href="#sec-3-3">3.3. Coercions</a>
+<ul>
+<li><a href="#sec-3-3-1">3.3.1. Casting literals into objects</a></li>
+<li><a href="#sec-3-3-2">3.3.2. Casting non-list literals into lists</a></li>
+<li><a href="#sec-3-3-3">3.3.3. Missing fields</a></li>
+</ul>
+</li>
+<li><a href="#sec-3-4">3.4. Regularizations</a>
+<ul>
+<li><a href="#sec-3-4-1">3.4.1. Missing fields &amp; type mismatch</a></li>
+<li><a href="#sec-3-4-2">3.4.2. Invalid values</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+This document describes the first version of the information aggregation protocol TProtocol.
+</p>
+
+<p>
+<b>Note</b>: This document is currently a work in progress. Some details may be changed in the future.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> The communication model</h2>
+<div class="outline-text-2" id="text-2">
+</div><div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> Definitions of terms</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+This part defines the terms used to describe the model in throughout the whole section.
+</p>
+
+<ul class="org-ul">
+<li>A <b>message</b> refers to the actual data used / sent by a TProtocol application.
+</li>
+<li><b>Greeting</b>, <b>Request</b> and <b>Response</b> refers to the actual query / response, encapsulated in the TProtocol packet format (described in section 3).
+</li>
+<li><b>Meeting</b> refers to any action that will lead to a server's Greeting.
+</li>
+<li>A <b>server</b> refers to any TProtocol applications that can produce &amp; send Greeting &amp; Response packets.
+</li>
+<li>A <b>client</b> refers to any entity that can produce &amp; send Request packets.
+</li>
+<li>A <b>Conversation</b> refers to a Request &amp; the server's Response acknowledging to that Request.
+</li>
+<li>A <b>publication</b> refers to sending Greetings or Responses.
+</li>
+<li>An <b>entity</b> refers to anything that can be published - a blogpost, a picture, a list of blogpost, etc.
+</li>
+<li>An <b>entity source</b> refers to a server that publishes entities. An <b>external entity source</b> refers to an entity source other than the server itself.
+</li>
+<li><b>Republishing</b> refers to the action of converting an external entity to an internal one.
+</li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-sec-2-2" class="outline-3">
+<h3 id="sec-2-2"><span class="section-number-3">2.2</span> Overview</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+In TProtocol, data are encapsulated in the "body" of HTTP requests &amp; response.
+</p>
+
+<p>
+TProtocol is <b>stateless</b>: every request / response message is independent, i.e. the content of such requests / responses could be arbitrary and does not depend on the content of any other messages.
+</p>
+
+<p>
+A typical TProtocol session may take the following steps:
+</p>
+
+<ol class="org-ol">
+<li>The client visits the server. This action is called a <b>Meeting</b>. Normally this will be a HTTP GET request without any additional data (cookies, etc). If there <i>is</i> such additional data, the server should ignore it. There's no rules / restriction on how a TProtocol server should respond to a Meeting, as long as the response is encapsulated in the proper format.
+</li>
+<li>The server respond with a Greeting (described in section ).
+</li>
+<li>The client sends a Catalog Request (described in section ).
+</li>
+<li>The server receives the Request, and sends the Catalog back to the client.
+</li>
+<li>The client chooses an entity in the Catalog, and sends a Detail Request.
+</li>
+<li>The server receives the Request, retrieves the specified entity, and sends the entity back to the client.
+</li>
+</ol>
+
+<p>
+The Request message is always sent using the HTTP POST method under the parameter name "msg".
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-sec-2-3" class="outline-3">
+<h3 id="sec-2-3"><span class="section-number-3">2.3</span> Message functions &amp; representations</h3>
+<div class="outline-text-3" id="text-2-3">
+</div><div id="outline-container-sec-2-3-1" class="outline-4">
+<h4 id="sec-2-3-1"><span class="section-number-4">2.3.1</span> Message functions</h4>
+<div class="outline-text-4" id="text-2-3-1">
+</div><ol class="org-ol"><li><a id="sec-2-3-1-1" name="sec-2-3-1-1"></a>Greeting message<br  /><div class="outline-text-5" id="text-2-3-1-1">
+<p>
+The Greeting message presents the "meta-information" about the server, including the server's name &amp; other informations that the client might need.
+</p>
+</div>
+</li>
+
+<li><a id="sec-2-3-1-2" name="sec-2-3-1-2"></a>Request message<br  /><div class="outline-text-5" id="text-2-3-1-2">
+<p>
+There are three types of Request message:
+</p>
+<ul class="org-ul">
+<li>Catalog Request, which asks for a list of entity sources.
+</li>
+<li>Feed Request, which asks for a list of entities from an entity source.
+</li>
+<li>Detail Request, which asks for the detail of a specific entity.
+</li>
+</ul>
+</div>
+</li>
+
+
+<li><a id="sec-2-3-1-3" name="sec-2-3-1-3"></a>Response message<br  /><div class="outline-text-5" id="text-2-3-1-3">
+<p>
+There are two types of Response message:
+</p>
+<ul class="org-ul">
+<li>Catalog, which includes a list of entity sources.
+</li>
+<li>Feed, which includes a list of entities.
+</li>
+<li>Detail, which includes the detail of a specific entity.
+</li>
+</ul>
+</div>
+</li></ol>
+</div>
+
+<div id="outline-container-sec-2-3-2" class="outline-4">
+<h4 id="sec-2-3-2"><span class="section-number-4">2.3.2</span> Representing messages</h4>
+<div class="outline-text-4" id="text-2-3-2">
+<p>
+Any message should have the following fields:
+</p>
+
+<ul class="org-ul">
+<li>"messageType", which indicates the message type, i.e. Request or Response.
+</li>
+<li>"messageSlot", which indicates what information is the message carrying, i.e. Catalog, Feed or Detail.
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-4" class="outline-3">
+<h3 id="sec-2-4"><span class="section-number-3">2.4</span> Entities</h3>
+<div class="outline-text-3" id="text-2-4">
+</div><div id="outline-container-sec-2-4-1" class="outline-4">
+<h4 id="sec-2-4-1"><span class="section-number-4">2.4.1</span> Internal entities</h4>
+<div class="outline-text-4" id="text-2-4-1">
+<p>
+<b>Internal entities</b> refer to any entity stored &amp; published on the server. The server is responsible for generating permalinks for such entities.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-4-2" class="outline-4">
+<h4 id="sec-2-4-2"><span class="section-number-4">2.4.2</span> External entities</h4>
+<div class="outline-text-4" id="text-2-4-2">
+<p>
+<b>External entities</b> refer to any data that has to be retrieved from other sites by pieces of specialized code (called "republication plugins").
+</p>
+
+<p>
+From the server's side, every piece of such code should declare the external entity it can retrieve. The server should respond with a list of such entities when a Catalog Request is received. The server is also not responsible for generating permalinks for external entities; instead, the server uses the permalink <b>generated by the entity's source</b>.
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-sec-2-5" class="outline-3">
+<h3 id="sec-2-5"><span class="section-number-3">2.5</span> Retrieving external entities</h3>
+<div class="outline-text-3" id="text-2-5">
+<p>
+The actual retrieval of external entities only happen when a client sends a request explicitly.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-6" class="outline-3">
+<h3 id="sec-2-6"><span class="section-number-3">2.6</span> Representing entities</h3>
+<div class="outline-text-3" id="text-2-6">
+<p>
+The representation of entities follows the following rules:
+</p>
+
+<ol class="org-ol">
+<li>Every entity is represented as a JSON object  when to be encapsulated in a Response.
+</li>
+<li>Entities should have the following fields:
+<ol class="org-ol">
+<li>"eid", whose purpose is to locate the entity on the server. It contains an object with the following fields:
+<ol class="org-ol">
+<li>"source", which contains a string that represents the source of the entity. The string "internal" is reserved for internal entities. The strings for external sources is up to the republication plugins.
+</li>
+<li>"id", whose purpose is to locate the entity in its source.
+</li>
+</ol>
+</li>
+<li>"body", which contains the entity's "body" - the body of a blogpost, etc.
+</li>
+</ol>
+</li>
+</ol>
+</div>
+</div>
+
+
+
+<div id="outline-container-sec-2-7" class="outline-3">
+<h3 id="sec-2-7"><span class="section-number-3">2.7</span> Example</h3>
+<div class="outline-text-3" id="text-2-7">
+<p>
+This section provides examples of some typical TProtocol messages.
+</p>
+
+<p>
+Catalog Request:
+</p>
+<pre class="example">
+{
+    "protocolVer": 1,
+    "messageType": "request",
+    "messageSlot": "catalog",
+}
+</pre>
+
+<p>
+Catalog Response:
+</p>
+<pre class="example">
+{
+    "protocolVer": 1,
+    "messageType": "response",
+    "messageSlot": "catalog",
+    "contentType": "one",
+    "fields": ["values"],
+    "content": {
+         "values": [
+             "internal",
+             "twitter-washington-post",
+             "youtube-pewdiepie",
+             "hackernews",
+             "github"
+         ]
+    }
+}
+</pre>
+
+
+<p>
+Feed Request:
+</p>
+<pre class="example">
+{
+    "protocolVer": 1,
+    "messageType": "request",
+    "messageSlot": "feed",
+    "contentType": "one",
+    "fields": ["values", "feed-size"],
+    "content": {
+        "values": "hackernews",
+        "feed-size": 20
+    }
+}
+</pre>
+
+
+<p>
+Feed Response:
+</p>
+<pre class="example">
+{
+    "protocolVer": 1,
+    "messageType": "response",
+    "messageSlot": "feed",
+    "contentType": "multi",
+    "fields": ["title", "eid", "body"],
+    "content": [
+        {
+            "title": "title_1", 
+            "eid": {
+                "source": "hackernews",
+                "id": "id1"
+            },
+            "body": "body1"
+        },
+        {
+            "title": "title_2",
+            "eid": {
+                "source": "hackernews",
+                "id": "id2"
+            },
+            "body": "body2"
+        }
+    ]
+}
+</pre>
+
+<p>
+Detail Request:
+</p>
+<pre class="example">
+{
+    "protocolVer": 1,
+    "messageType": "response",
+    "messageSlot": "detail",
+    "contentType": "one",
+    "fields": ["source", "id"],
+    "content": {
+        "source": "hackernews",
+        "id": "id2"
+    }
+}
+</pre>
+
+<p>
+Detail Response:
+</p>
+<pre class="example">
+{
+    "protocolVer": 1,
+    "messageType": "response",
+    "messageSlot": "detail",
+    "contentType": "one",
+    "fields": ["title", "eid", "body"],
+    "content": {
+        "title": "title1",
+        "eid": {
+            "source": "hackernews",
+            "id": "id2"
+        }
+        "body": "body1"
+    }
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3"><span class="section-number-2">3</span> The format</h2>
+<div class="outline-text-2" id="text-3">
+</div><div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1"><span class="section-number-3">3.1</span> The basic message format</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+A TProtocol message is a JSON object with the following required fields:
+</p>
+<ul class="org-ul">
+<li>"content", whose value is the actual content.
+</li>
+<li>"contentType", whose value should be one of the following string values:
+<ul class="org-ul">
+<li>"one", which means the content is a single object.
+</li>
+<li>"multiple", which means the content is a list of objects.
+</li>
+<li>"message", which means the content itself is another TProtocol message.
+</li>
+<li>"multimsg", which means the content is a list of TProtocol messages.
+</li>
+</ul>
+</li>
+<li>"fields", which describe the schema of the content:
+<ul class="org-ul">
+<li>when "contentType" is "one", its value is the <i>expected keys</i> of the object in the "content" field. i.e. the object is expected to have fields with these keys, and when that's not the case, a regularization (described in <a href="#regularizations">3.4</a>) should be performed; other fields in the object are simply ignored.
+</li>
+<li>when "contentType" is "multiple", its values is the <i>expected keys</i> of the objects in the list.
+</li>
+<li>when "contentType" is "message" or "multimsg", then this field is completely ignored, and could be any valid JSON literals. In this case, the actual <i>expected keys</i> are <code>["content", "contentType", "fields"]</code>.
+</li>
+</ul>
+</li>
+</ul>
+
+<p>
+For example, this:
+</p>
+
+<pre class="example">
+{
+    "protocolVer": 1,
+    "messageType": "greeting",
+    "serverName": "Demo TProtocol Server",
+    "contentType": "one",
+    "fields": ["welcomeMessage", "time"],
+    "content": {
+        "welcomeMessage": "Welcome to the demo TProtocol server!",
+        "time": "2018-05-06 Sun 13:39:45"
+    }
+}
+</pre>
+
+<p>
+is a valid message and works well as a Greeting message (the actual requirements for Greeting and other TProtocol message are described in section <a href="#message-schema">3.2</a>); this:
+</p>
+
+<pre class="example">
+{
+    "contentType": "multiple",
+    "fields": ["title", "body"],
+    "content": [
+        {
+            "title": "My first blogpost!",
+            "body": "Welcome to my blog!"
+        },
+        {
+            "title": "My second blogpost!",
+            "body": "I just had a wonderful day!"
+        }
+    ]
+}
+</pre>
+
+<p>
+is also a valid TProtocol message, but:
+</p>
+
+<pre class="example">
+{
+    "contentType": "multiple",
+    "fields": ["title", "body"],
+    "content": [
+        {
+            "body": "Welcome to my blog!"
+        },
+        {
+            "title": "My second blogpost!",
+            "body": "I just had a wonderful day!"
+        }
+    ]
+}
+</pre>
+
+<p>
+is not, and needs regularization, for the reason that:
+</p>
+<pre class="example">
+...
+"content": [
+    {
+        "body": "Welcome to my blog!"
+    },
+...
+</pre>
+<p>
+is missing a field (namely "title") specified in the "fields" field.
+</p>
+
+<p>
+Additional fields may exists and won't make a message invalid, but these fields will be ignored.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2"><span class="section-number-3">3.2</span> <a id="message-schema" name="message-schema"></a>Schema for TProtocol messages</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+This section describes the additional requirements for actual TProtocol messages.
+</p>
+
+<p>
+To be considered as a valid TProtocol message, a message must have a "messageType" field at the top-layer, whose value must be one of:
+</p>
+<ul class="org-ul">
+<li>"greeting", which indicates that the messge is a Greeting.
+</li>
+<li>"request", which indicates that the message is a Request.
+</li>
+<li>"response", which indicates that the message is a Response.
+</li>
+<li>"", which indicates that the message is a NIL message (described in section <a href="#nil-message">3.2.1</a>).
+</li>
+</ul>
+</div>
+
+<div id="outline-container-sec-3-2-1" class="outline-4">
+<h4 id="sec-3-2-1"><span class="section-number-4">3.2.1</span> <a id="nil-message" name="nil-message"></a>The "NIL" message</h4>
+<div class="outline-text-4" id="text-3-2-1">
+<p>
+When the "messageType" field of a message holds the value of "", then the message is considered as a NIL message. NIL messages does not represent any kind of TProtocol functions, and should be ignored by the server.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2-2" class="outline-4">
+<h4 id="sec-3-2-2"><span class="section-number-4">3.2.2</span> Greeting messages</h4>
+<div class="outline-text-4" id="text-3-2-2">
+<p>
+In addition to the required fields listed above, the following fields are required in order to be considered as a valid Greeting message:
+</p>
+<ul class="org-ul">
+<li>"serverName", whose value is a string, which is the server's (human-friendly) name.
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2-3" class="outline-4">
+<h4 id="sec-3-2-3"><span class="section-number-4">3.2.3</span> Request messages</h4>
+<div class="outline-text-4" id="text-3-2-3">
+<p>
+In addition to the required fields listed in the beginning of section <a href="#message-schema">3.2</a>, the following fields are required in order to be considered as a valid Request message:
+</p>
+<ul class="org-ul">
+<li>"requestType", whose value is one of:
+<ul class="org-ul">
+<li>"catalog"
+</li>
+<li>"
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-3" class="outline-3">
+<h3 id="sec-3-3"><span class="section-number-3">3.3</span> <a id="coercions" name="coercions"></a>Coercions</h3>
+<div class="outline-text-3" id="text-3-3">
+<p>
+There could be messages that didn't follow the exact format described above. This section describes the rules of "re-formatting" in such occasions.
+</p>
+</div>
+
+<div id="outline-container-sec-3-3-1" class="outline-4">
+<h4 id="sec-3-3-1"><span class="section-number-4">3.3.1</span> <a id="casting-literals" name="casting-literals"></a>Casting literals into objects</h4>
+<div class="outline-text-4" id="text-3-3-1">
+<p>
+All literals other than objects, when required to work as objects, are coerced into objects using the rules described below.
+</p>
+</div>
+
+<ol class="org-ol"><li><a id="sec-3-3-1-1" name="sec-3-3-1-1"></a>Non-list literals<br  /><div class="outline-text-5" id="text-3-3-1-1">
+<p>
+When the subject literal is not a list, i.e. it's a boolean / number / string, it's considered to be an object with only a single field "value". e.g.
+</p>
+
+<pre class="example">
+...
+"someFieldName": 3
+...
+</pre>
+
+<p>
+is considered to be the same as:
+</p>
+
+<pre class="example">
+...
+"someFieldName": {
+    "value": 3
+}
+...
+</pre>
+</div>
+</li>
+
+<li><a id="sec-3-3-1-2" name="sec-3-3-1-2"></a>Lists<br  /><div class="outline-text-5" id="text-3-3-1-2">
+<p>
+When the subject literal is a list, it's considered to be an object with the string representations of its indices as the result object's keys. e.g. this:
+</p>
+<pre class="example">
+...
+"someFieldName": [3, 4, 5]
+...
+</pre>
+
+<p>
+is considered to be the same as:
+</p>
+
+<pre class="example">
+...
+"someFieldName": {
+    "0": 3,
+    "1": 4,
+    "2": 5
+}
+...
+</pre>
+</div>
+</li></ol>
+</div>
+
+<div id="outline-container-sec-3-3-2" class="outline-4">
+<h4 id="sec-3-3-2"><span class="section-number-4">3.3.2</span> Casting non-list literals into lists</h4>
+<div class="outline-text-4" id="text-3-3-2">
+<p>
+Literals which themselves are not lists, when required to work as lists, are coerced into lists using the rules described below.
+</p>
+
+<p>
+A literal is considered to be a list containing only the literal itself. e.g. this:
+</p>
+
+
+<pre class="example">
+{
+    "protocolVer": 1,
+    "contentType": "multi",
+    "fields": ["fieldName1", "fieldName2"],
+    "content": {
+        "fieldName1": "",
+        "fieldName2": "some value"
+    }
+}
+</pre>
+
+<p>
+is considered to be the same as:
+</p>
+
+<pre class="example">
+{
+    "protocolVer": 1,
+    "contentType": "multi",
+    "fields": ["fieldName1", "fieldName2"],
+    "content": [
+        {
+            "fieldName1": "",
+            "fieldName2": "some value"
+        }
+    ]
+}
+</pre>
+
+<p>
+and this:
+</p>
+
+<pre class="example">
+...
+"fieldName1": 3
+...
+</pre>
+
+<p>
+is considered to be the same as:
+</p>
+<pre class="example">
+...
+"fieldName1": [3]
+...
+</pre>
+
+<p>
+when it happens that the value of "fieldName1" needs to be a list.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-3-3" class="outline-4">
+<h4 id="sec-3-3-3"><span class="section-number-4">3.3.3</span> Missing fields</h4>
+<div class="outline-text-4" id="text-3-3-3">
+<p>
+This rule should be applied when the "content" field of a message does not contain one or more fields specified in the "fields" field.
+</p>
+
+<p>
+All fields has a default value of "" except:
+</p>
+<ul class="org-ul">
+<li>"protocolVer" in the top-layer of the message has a default value of 1;
+</li>
+<li>"contentType" in the top-layer of the message has a default value of "one";
+</li>
+<li>"fields" has a default value of [];
+</li>
+<li>"content" has a default value of {}, so this:
+</li>
+</ul>
+
+<pre class="example">
+{
+    "contentType": "one",
+    "fields": ["fieldName1", "fieldName2"],
+    "content": {
+        "fieldName2": "some value"
+    }
+}
+</pre>
+<p>
+is considered to be the same as:
+</p>
+
+<pre class="example">
+{
+    "contentType": "one",
+    "fields": ["fieldName1", "fieldName2"],
+    "content": {
+        "fieldName1": "",
+        "fieldName2": "some value"
+    }
+}
+</pre>
+
+<p>
+and:
+</p>
+<pre class="example">
+{
+    "protocolVer": 1,
+    "contentType": "one",
+    "fields": ["fieldName1", "fieldName2"],
+    "content": {
+        "fieldName1": "",
+        "fieldName2": "some value"
+    }
+}
+</pre>
+
+<p>
+, and this:
+</p>
+<pre class="example">
+{
+    "contentType": "one",
+    "fields": ["name", "email"],
+}
+</pre>
+
+<p>
+is considered to be the same as:
+</p>
+<pre class="example">
+{
+    "contentType": "one",
+    "fields": ["name", "email"],
+    "content": {}
+}
+</pre>
+
+<p>
+which is in term considered to be the same as:
+</p>
+<pre class="example">
+{
+    "contentType": "one",
+    "fields": ["name", "email"],
+    "content": {
+        "name": "",
+        "email": ""
+    }
+}
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-4" class="outline-3">
+<h3 id="sec-3-4"><span class="section-number-3">3.4</span> <a id="regularizations" name="regularizations"></a>Regularizations</h3>
+<div class="outline-text-3" id="text-3-4">
+</div><div id="outline-container-sec-3-4-1" class="outline-4">
+<h4 id="sec-3-4-1"><span class="section-number-4">3.4.1</span> Missing fields &amp; type mismatch</h4>
+<div class="outline-text-4" id="text-3-4-1">
+<p>
+Missing fields or type mismatch (only an object is presented when a list is expected, for example) are regularized by applying the coercion rules described in <a href="#coercions">3.3</a>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3-4-2" class="outline-4">
+<h4 id="sec-3-4-2"><span class="section-number-4">3.4.2</span> Invalid values</h4>
+<div class="outline-text-4" id="text-3-4-2">
+</div><ol class="org-ol"><li><a id="sec-3-4-2-1" name="sec-3-4-2-1"></a>Invalid values of the "contentType" fields<br  /><div class="outline-text-5" id="text-3-4-2-1">
+<p>
+When a message's "contentType" field contains values other than "one", "multi", "message" and "multimsg" (e.g. other string literals, or even other literals like boolean values and objects), it's considered to be "one" regardless of the value itself.
+</p>
+</div>
+</li>
+
+<li><a id="sec-3-4-2-2" name="sec-3-4-2-2"></a>Invalid values of the "messageType" fields<br  /><div class="outline-text-5" id="text-3-4-2-2">
+<p>
+When a message's "messageType" field contains values other than "", "greeting", "request" and "response", it's considered to be "" regardless of the value itself. i.e. any invalid TProtocol messages are (and should be considered as) NIL messages by default.
+</p>
+</div>
+</li></ol>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Created: 2018-05-28 一 22:47</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.3.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>
