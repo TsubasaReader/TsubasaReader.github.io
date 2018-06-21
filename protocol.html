@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2018-06-12 二 20:35 -->
+<!-- 2018-06-12 二 23:02 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>TProtocol Specification, version 1</title>
@@ -234,56 +234,56 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgf9daaf9">1. Introduction</a></li>
-<li><a href="#org746f572">2. The communication model</a>
+<li><a href="#orgbfbc302">1. Introduction</a></li>
+<li><a href="#orgb566a40">2. The communication model</a>
 <ul>
-<li><a href="#orge9ea3d3">2.1. Definitions of terms</a></li>
-<li><a href="#org5a160b9">2.2. Overview</a></li>
-<li><a href="#orgf5c6e86">2.3. Message functions &amp; representations</a>
+<li><a href="#org8fc3efa">2.1. Definitions of terms</a></li>
+<li><a href="#orge7605b9">2.2. Overview</a></li>
+<li><a href="#orga3ea68f">2.3. Message functions &amp; representations</a>
 <ul>
-<li><a href="#orgdfc5eee">2.3.1. Message functions</a></li>
-<li><a href="#orgc6dea0c">2.3.2. Representing messages</a></li>
+<li><a href="#org537e138">2.3.1. Message functions</a></li>
+<li><a href="#org26d6e6b">2.3.2. Representing messages</a></li>
 </ul>
 </li>
-<li><a href="#org6e805c9">2.4. Details of Representing Requests</a>
+<li><a href="#org61e3c6d">2.4. Details of Representing Requests</a>
 <ul>
-<li><a href="#orgfdc276d">2.4.1. Representing Catalog Requests</a></li>
-<li><a href="#org842afff">2.4.2. Representing Feed Requests</a></li>
-<li><a href="#org97dd026">2.4.3. Representing Entity Requests</a></li>
+<li><a href="#org92b1d12">2.4.1. Representing Catalog Requests</a></li>
+<li><a href="#orgfbba1a9">2.4.2. Representing Feed Requests</a></li>
+<li><a href="#org4ccec42">2.4.3. Representing Entity Requests</a></li>
 </ul>
 </li>
-<li><a href="#orgefda808">2.5. Entities</a>
+<li><a href="#orgaf26e00">2.5. Entities</a>
 <ul>
-<li><a href="#org37bb147">2.5.1. Internal entities</a></li>
-<li><a href="#org2d5db7c">2.5.2. External entities</a></li>
+<li><a href="#org0aefb51">2.5.1. Internal entities</a></li>
+<li><a href="#org84d9e1c">2.5.2. External entities</a></li>
 </ul>
 </li>
-<li><a href="#org93a39a8">2.6. Retrieving external entities</a></li>
-<li><a href="#orgd1a10f7">2.7. Representing entities</a></li>
-<li><a href="#orge7fa3ba">2.8. Responding to Requests</a>
+<li><a href="#org42dc331">2.6. Retrieving external entities</a></li>
+<li><a href="#orge6cc589">2.7. Representing entities</a></li>
+<li><a href="#orgbf54368">2.8. Responding to Requests</a>
 <ul>
-<li><a href="#org2553230">2.8.1. Catalog Response</a></li>
-<li><a href="#orgf53592b">2.8.2. Feed Response</a></li>
-<li><a href="#org7e5be03">2.8.3. Entity Response</a></li>
+<li><a href="#org48503fb">2.8.1. Catalog Response</a></li>
+<li><a href="#orga43975e">2.8.2. Feed Response</a></li>
+<li><a href="#orgfc6509f">2.8.3. Entity Response</a></li>
 </ul>
 </li>
-<li><a href="#orgba319ca">2.9. Example</a></li>
+<li><a href="#orgc9ece79">2.9. Example</a></li>
 </ul>
 </li>
-<li><a href="#orga56bd35">3. The format</a>
+<li><a href="#org07376e1">3. The format</a>
 <ul>
-<li><a href="#orgf76ed61">3.1. The basic message format</a></li>
-<li><a href="#org537bcad">3.2. Coercions</a>
+<li><a href="#org850277c">3.1. The basic message format</a></li>
+<li><a href="#org0bca5d5">3.2. Coercions</a>
 <ul>
-<li><a href="#orgacccde7">3.2.1. Casting literals into objects</a></li>
-<li><a href="#orgc962ef8">3.2.2. Casting non-list literals into lists</a></li>
-<li><a href="#org7f547e7">3.2.3. Missing fields</a></li>
+<li><a href="#org0a6ab62">3.2.1. Casting literals into objects</a></li>
+<li><a href="#org8f1e4e4">3.2.2. Casting non-list literals into lists</a></li>
+<li><a href="#org0afce06">3.2.3. Missing fields</a></li>
 </ul>
 </li>
-<li><a href="#org588a98f">3.3. Regularizations</a>
+<li><a href="#orgddede5c">3.3. Regularizations</a>
 <ul>
-<li><a href="#orga2e5add">3.3.1. Missing fields &amp; type mismatch</a></li>
-<li><a href="#org49db7e2">3.3.2. Invalid values</a></li>
+<li><a href="#org6d963c1">3.3.1. Missing fields &amp; type mismatch</a></li>
+<li><a href="#orgd4cd932">3.3.2. Invalid values</a></li>
 </ul>
 </li>
 </ul>
@@ -293,8 +293,8 @@ for the JavaScript code in this tag.
 </div>
 
 
-<div id="outline-container-orgf9daaf9" class="outline-2">
-<h2 id="orgf9daaf9"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-orgbfbc302" class="outline-2">
+<h2 id="orgbfbc302"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Version: 2018-6-12
@@ -310,12 +310,12 @@ This document describes the first version of the information aggregation protoco
 </div>
 </div>
 
-<div id="outline-container-org746f572" class="outline-2">
-<h2 id="org746f572"><span class="section-number-2">2</span> The communication model</h2>
+<div id="outline-container-orgb566a40" class="outline-2">
+<h2 id="orgb566a40"><span class="section-number-2">2</span> The communication model</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-orge9ea3d3" class="outline-3">
-<h3 id="orge9ea3d3"><span class="section-number-3">2.1</span> Definitions of terms</h3>
+<div id="outline-container-org8fc3efa" class="outline-3">
+<h3 id="org8fc3efa"><span class="section-number-3">2.1</span> Definitions of terms</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 This part defines the terms used to describe the model in throughout the whole section.
@@ -337,8 +337,8 @@ This part defines the terms used to describe the model in throughout the whole s
 </div>
 
 
-<div id="outline-container-org5a160b9" class="outline-3">
-<h3 id="org5a160b9"><span class="section-number-3">2.2</span> Overview</h3>
+<div id="outline-container-orge7605b9" class="outline-3">
+<h3 id="orge7605b9"><span class="section-number-3">2.2</span> Overview</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 In TProtocol, data are encapsulated in the "body" of HTTP requests &amp; response.
@@ -368,16 +368,16 @@ The Request message is always sent using the HTTP POST method under the paramete
 </div>
 
 
-<div id="outline-container-orgf5c6e86" class="outline-3">
-<h3 id="orgf5c6e86"><span class="section-number-3">2.3</span> <a id="org2b86b17"></a>Message functions &amp; representations</h3>
+<div id="outline-container-orga3ea68f" class="outline-3">
+<h3 id="orga3ea68f"><span class="section-number-3">2.3</span> <a id="org4b3c420"></a>Message functions &amp; representations</h3>
 <div class="outline-text-3" id="text-2-3">
 </div>
-<div id="outline-container-orgdfc5eee" class="outline-4">
-<h4 id="orgdfc5eee"><span class="section-number-4">2.3.1</span> Message functions</h4>
+<div id="outline-container-org537e138" class="outline-4">
+<h4 id="org537e138"><span class="section-number-4">2.3.1</span> Message functions</h4>
 <div class="outline-text-4" id="text-2-3-1">
 </div>
 <ol class="org-ol">
-<li><a id="org83273a1"></a>Greeting message<br />
+<li><a id="orgd277ada"></a>Greeting message<br />
 <div class="outline-text-5" id="text-2-3-1-1">
 <p>
 The Greeting message presents the "meta-information" about the server, including the server's name &amp; other informations that the client might need.
@@ -385,7 +385,7 @@ The Greeting message presents the "meta-information" about the server, including
 </div>
 </li>
 
-<li><a id="org075e683"></a>Request message<br />
+<li><a id="org8e6ca76"></a>Request message<br />
 <div class="outline-text-5" id="text-2-3-1-2">
 <p>
 There are three types of Request message:
@@ -399,7 +399,7 @@ There are three types of Request message:
 </li>
 
 
-<li><a id="org212a935"></a>Response message<br />
+<li><a id="org65e849b"></a>Response message<br />
 <div class="outline-text-5" id="text-2-3-1-3">
 <p>
 There are four types of Response message:
@@ -408,15 +408,15 @@ There are four types of Response message:
 <li>Catalog, which includes a list of entity sources.</li>
 <li>Feed, which includes a list of entities.</li>
 <li>Detail, which includes the detail of a specific entity.</li>
-<li>Error, which indicates there has been an error: the eid (described in section <a href="#orgfcdce1b">2.7</a>) refers to an entity that never existed, etc.</li>
+<li>Error, which indicates there has been an error: the eid (described in section <a href="#orgd7f8e22">2.7</a>) refers to an entity that never existed, etc.</li>
 </ul>
 </div>
 </li>
 </ol>
 </div>
 
-<div id="outline-container-orgc6dea0c" class="outline-4">
-<h4 id="orgc6dea0c"><span class="section-number-4">2.3.2</span> Representing messages</h4>
+<div id="outline-container-org26d6e6b" class="outline-4">
+<h4 id="org26d6e6b"><span class="section-number-4">2.3.2</span> Representing messages</h4>
 <div class="outline-text-4" id="text-2-3-2">
 <p>
 Any message should have the following fields:
@@ -430,12 +430,12 @@ Any message should have the following fields:
 </div>
 </div>
 
-<div id="outline-container-org6e805c9" class="outline-3">
-<h3 id="org6e805c9"><span class="section-number-3">2.4</span> Details of Representing Requests</h3>
+<div id="outline-container-org61e3c6d" class="outline-3">
+<h3 id="org61e3c6d"><span class="section-number-3">2.4</span> Details of Representing Requests</h3>
 <div class="outline-text-3" id="text-2-4">
 </div>
-<div id="outline-container-orgfdc276d" class="outline-4">
-<h4 id="orgfdc276d"><span class="section-number-4">2.4.1</span> Representing Catalog Requests</h4>
+<div id="outline-container-org92b1d12" class="outline-4">
+<h4 id="org92b1d12"><span class="section-number-4">2.4.1</span> Representing Catalog Requests</h4>
 <div class="outline-text-4" id="text-2-4-1">
 <p>
 A valid Catalog Request must meet the following conditions:
@@ -449,8 +449,8 @@ No further condition is required.
 </div>
 </div>
 
-<div id="outline-container-org842afff" class="outline-4">
-<h4 id="org842afff"><span class="section-number-4">2.4.2</span> Representing Feed Requests</h4>
+<div id="outline-container-orgfbba1a9" class="outline-4">
+<h4 id="orgfbba1a9"><span class="section-number-4">2.4.2</span> Representing Feed Requests</h4>
 <div class="outline-text-4" id="text-2-4-2">
 <p>
 A valid Feed Request Message must meet the following conditions:
@@ -471,8 +471,8 @@ is replied.</li>
 </div>
 </div>
 
-<div id="outline-container-org97dd026" class="outline-4">
-<h4 id="org97dd026"><span class="section-number-4">2.4.3</span> Representing Entity Requests</h4>
+<div id="outline-container-org4ccec42" class="outline-4">
+<h4 id="org4ccec42"><span class="section-number-4">2.4.3</span> Representing Entity Requests</h4>
 <div class="outline-text-4" id="text-2-4-3">
 <p>
 A valid Entity Request Message must meet the following conditions:
@@ -483,12 +483,12 @@ A valid Entity Request Message must meet the following conditions:
 
 
 
-<div id="outline-container-orgefda808" class="outline-3">
-<h3 id="orgefda808"><span class="section-number-3">2.5</span> Entities</h3>
+<div id="outline-container-orgaf26e00" class="outline-3">
+<h3 id="orgaf26e00"><span class="section-number-3">2.5</span> Entities</h3>
 <div class="outline-text-3" id="text-2-5">
 </div>
-<div id="outline-container-org37bb147" class="outline-4">
-<h4 id="org37bb147"><span class="section-number-4">2.5.1</span> Internal entities</h4>
+<div id="outline-container-org0aefb51" class="outline-4">
+<h4 id="org0aefb51"><span class="section-number-4">2.5.1</span> Internal entities</h4>
 <div class="outline-text-4" id="text-2-5-1">
 <p>
 <b>Internal entities</b> refer to any entity stored &amp; published on the server. The server is responsible for generating permalinks for such entities.
@@ -496,8 +496,8 @@ A valid Entity Request Message must meet the following conditions:
 </div>
 </div>
 
-<div id="outline-container-org2d5db7c" class="outline-4">
-<h4 id="org2d5db7c"><span class="section-number-4">2.5.2</span> External entities</h4>
+<div id="outline-container-org84d9e1c" class="outline-4">
+<h4 id="org84d9e1c"><span class="section-number-4">2.5.2</span> External entities</h4>
 <div class="outline-text-4" id="text-2-5-2">
 <p>
 <b>External entities</b> refer to any data that has to be retrieved from other sites by pieces of specialized code (called "republication plugins").
@@ -511,8 +511,8 @@ From the server's side, every piece of such code should declare the external ent
 </div>
 
 
-<div id="outline-container-org93a39a8" class="outline-3">
-<h3 id="org93a39a8"><span class="section-number-3">2.6</span> Retrieving external entities</h3>
+<div id="outline-container-org42dc331" class="outline-3">
+<h3 id="org42dc331"><span class="section-number-3">2.6</span> Retrieving external entities</h3>
 <div class="outline-text-3" id="text-2-6">
 <p>
 The actual retrieval of external entities only happen when a client sends a request explicitly.
@@ -520,8 +520,8 @@ The actual retrieval of external entities only happen when a client sends a requ
 </div>
 </div>
 
-<div id="outline-container-orgd1a10f7" class="outline-3">
-<h3 id="orgd1a10f7"><span class="section-number-3">2.7</span> <a id="orgfcdce1b"></a> Representing entities</h3>
+<div id="outline-container-orge6cc589" class="outline-3">
+<h3 id="orge6cc589"><span class="section-number-3">2.7</span> <a id="orgd7f8e22"></a> Representing entities</h3>
 <div class="outline-text-3" id="text-2-7">
 <p>
 The representation of entities follows the following rules:
@@ -544,12 +544,12 @@ The representation of entities follows the following rules:
 
 
 
-<div id="outline-container-orge7fa3ba" class="outline-3">
-<h3 id="orge7fa3ba"><span class="section-number-3">2.8</span> <a id="orga260d26"></a>Responding to Requests</h3>
+<div id="outline-container-orgbf54368" class="outline-3">
+<h3 id="orgbf54368"><span class="section-number-3">2.8</span> <a id="org35d8ecc"></a>Responding to Requests</h3>
 <div class="outline-text-3" id="text-2-8">
 </div>
-<div id="outline-container-org2553230" class="outline-4">
-<h4 id="org2553230"><span class="section-number-4">2.8.1</span> Catalog Response</h4>
+<div id="outline-container-org48503fb" class="outline-4">
+<h4 id="org48503fb"><span class="section-number-4">2.8.1</span> Catalog Response</h4>
 <div class="outline-text-4" id="text-2-8-1">
 <p>
 A valid Catalog Response must meet the following conditions:
@@ -561,8 +561,8 @@ A valid Catalog Response must meet the following conditions:
 </div>
 </div>
 
-<div id="outline-container-orgf53592b" class="outline-4">
-<h4 id="orgf53592b"><span class="section-number-4">2.8.2</span> Feed Response</h4>
+<div id="outline-container-orga43975e" class="outline-4">
+<h4 id="orga43975e"><span class="section-number-4">2.8.2</span> Feed Response</h4>
 <div class="outline-text-4" id="text-2-8-2">
 <p>
 A valid Feed Response must meet the following conditions:
@@ -578,24 +578,24 @@ Note that:
 </p>
 <ol class="org-ol">
 <li>When the server receives a Feed Request, the client must <i>have</i> known the entity source. Specifying the entity source in Response will be redundant.</li>
-<li>According to the coercion rule (described in section <a href="#orgc5452ff">3.2</a>), <code>{"value": X}</code> is interchangable with <code>X</code>.</li>
+<li>According to the coercion rule (described in section <a href="#org98c1260">3.2</a>), <code>{"value": X}</code> is interchangable with <code>X</code>.</li>
 </ol>
 </div>
 </div>
 
-<div id="outline-container-org7e5be03" class="outline-4">
-<h4 id="org7e5be03"><span class="section-number-4">2.8.3</span> Entity Response</h4>
+<div id="outline-container-orgfc6509f" class="outline-4">
+<h4 id="orgfc6509f"><span class="section-number-4">2.8.3</span> Entity Response</h4>
 <div class="outline-text-4" id="text-2-8-3">
 <p>
-The valid representation of an Entity Response is described in <a href="#orgfcdce1b">2.7</a>.
+The valid representation of an Entity Response is described in <a href="#orgd7f8e22">2.7</a>.
 </p>
 </div>
 </div>
 </div>
 
 
-<div id="outline-container-orgba319ca" class="outline-3">
-<h3 id="orgba319ca"><span class="section-number-3">2.9</span> Example</h3>
+<div id="outline-container-orgc9ece79" class="outline-3">
+<h3 id="orgc9ece79"><span class="section-number-3">2.9</span> Example</h3>
 <div class="outline-text-3" id="text-2-9">
 <p>
 This section provides examples of some typical TProtocol messages.
@@ -708,12 +708,12 @@ Detail Response:
 </div>
 </div>
 
-<div id="outline-container-orga56bd35" class="outline-2">
-<h2 id="orga56bd35"><span class="section-number-2">3</span> The format</h2>
+<div id="outline-container-org07376e1" class="outline-2">
+<h2 id="org07376e1"><span class="section-number-2">3</span> The format</h2>
 <div class="outline-text-2" id="text-3">
 </div>
-<div id="outline-container-orgf76ed61" class="outline-3">
-<h3 id="orgf76ed61"><span class="section-number-3">3.1</span> The basic message format</h3>
+<div id="outline-container-org850277c" class="outline-3">
+<h3 id="org850277c"><span class="section-number-3">3.1</span> The basic message format</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
 A TProtocol message is a JSON object with the following required fields:
@@ -729,7 +729,7 @@ A TProtocol message is a JSON object with the following required fields:
 </ul></li>
 <li>"fields", which describe the schema of the content:
 <ul class="org-ul">
-<li>when "contentType" is "one", its value is the <i>expected keys</i> of the object in the "content" field. i.e. the object is expected to have fields with these keys, and when that's not the case, a regularization (described in <a href="#org75f95b6">3.3</a>) should be performed; other fields in the object are simply ignored.</li>
+<li>when "contentType" is "one", its value is the <i>expected keys</i> of the object in the "content" field. i.e. the object is expected to have fields with these keys, and when that's not the case, a regularization (described in <a href="#org3f5f250">3.3</a>) should be performed; other fields in the object are simply ignored.</li>
 <li>when "contentType" is "multi", its values is the <i>expected keys</i> of the objects in the list.</li>
 <li>when "contentType" is "message" or "multimsg", then this field is completely ignored, and could be any valid JSON literals. In this case, the actual <i>expected keys</i> are <code>["content", "contentType", "fields"]</code>.</li>
 </ul></li>
@@ -754,7 +754,7 @@ For example, this:
 </pre>
 
 <p>
-is a valid message and works well as a Greeting message (the actual requirements for Greeting and other TProtocol message are described from section <a href="#org2b86b17">2.3</a> to section <a href="#orga260d26">2.8</a>); this:
+is a valid message and works well as a Greeting message (the actual requirements for Greeting and other TProtocol message are described from section <a href="#org4b3c420">2.3</a> to section <a href="#org35d8ecc">2.8</a>); this:
 </p>
 
 <pre class="example">
@@ -815,16 +815,16 @@ Additional fields may exists and won't make a message invalid, but these fields 
 </div>
 </div>
 
-<div id="outline-container-org537bcad" class="outline-3">
-<h3 id="org537bcad"><span class="section-number-3">3.2</span> <a id="orgc5452ff"></a>Coercions</h3>
+<div id="outline-container-org0bca5d5" class="outline-3">
+<h3 id="org0bca5d5"><span class="section-number-3">3.2</span> <a id="org98c1260"></a>Coercions</h3>
 <div class="outline-text-3" id="text-3-2">
 <p>
 There could be messages that didn't follow the exact format described above. This section describes the rules of "re-formatting" in such occasions.
 </p>
 </div>
 
-<div id="outline-container-orgacccde7" class="outline-4">
-<h4 id="orgacccde7"><span class="section-number-4">3.2.1</span> <a id="org51e3894"></a>Casting literals into objects</h4>
+<div id="outline-container-org0a6ab62" class="outline-4">
+<h4 id="org0a6ab62"><span class="section-number-4">3.2.1</span> <a id="org34882c4"></a>Casting literals into objects</h4>
 <div class="outline-text-4" id="text-3-2-1">
 <p>
 All literals other than objects, when required to work as objects, are coerced into objects using the rules described below.
@@ -832,7 +832,7 @@ All literals other than objects, when required to work as objects, are coerced i
 </div>
 
 <ol class="org-ol">
-<li><a id="org789b7d5"></a>Non-list literals<br />
+<li><a id="orge3ee27c"></a>Non-list literals<br />
 <div class="outline-text-5" id="text-3-2-1-1">
 <p>
 When the subject literal is not a list, i.e. it's a boolean / number / string, it's considered to be an object with only a single field "value". e.g.
@@ -858,7 +858,7 @@ is considered to be the same as:
 </div>
 </li>
 
-<li><a id="org11708b8"></a>Lists<br />
+<li><a id="orgbd17e6d"></a>Lists<br />
 <div class="outline-text-5" id="text-3-2-1-2">
 <p>
 When the subject literal is a list, it's considered to be an object with the string representations of its indices as the result object's keys. e.g. this:
@@ -887,8 +887,8 @@ is considered to be the same as:
 </ol>
 </div>
 
-<div id="outline-container-orgc962ef8" class="outline-4">
-<h4 id="orgc962ef8"><span class="section-number-4">3.2.2</span> Casting non-list literals into lists</h4>
+<div id="outline-container-org8f1e4e4" class="outline-4">
+<h4 id="org8f1e4e4"><span class="section-number-4">3.2.2</span> Casting non-list literals into lists</h4>
 <div class="outline-text-4" id="text-3-2-2">
 <p>
 Literals which themselves are not lists, when required to work as lists, are coerced into lists using the rules described below.
@@ -954,8 +954,8 @@ when it happens that the value of "fieldName1" needs to be a list.
 </div>
 </div>
 
-<div id="outline-container-org7f547e7" class="outline-4">
-<h4 id="org7f547e7"><span class="section-number-4">3.2.3</span> Missing fields</h4>
+<div id="outline-container-org0afce06" class="outline-4">
+<h4 id="org0afce06"><span class="section-number-4">3.2.3</span> Missing fields</h4>
 <div class="outline-text-4" id="text-3-2-3">
 <p>
 This rule should be applied when the "content" field of a message does not contain one or more fields specified in the "fields" field.
@@ -1048,25 +1048,25 @@ which is in term considered to be the same as:
 </div>
 </div>
 
-<div id="outline-container-org588a98f" class="outline-3">
-<h3 id="org588a98f"><span class="section-number-3">3.3</span> <a id="org75f95b6"></a>Regularizations</h3>
+<div id="outline-container-orgddede5c" class="outline-3">
+<h3 id="orgddede5c"><span class="section-number-3">3.3</span> <a id="org3f5f250"></a>Regularizations</h3>
 <div class="outline-text-3" id="text-3-3">
 </div>
-<div id="outline-container-orga2e5add" class="outline-4">
-<h4 id="orga2e5add"><span class="section-number-4">3.3.1</span> Missing fields &amp; type mismatch</h4>
+<div id="outline-container-org6d963c1" class="outline-4">
+<h4 id="org6d963c1"><span class="section-number-4">3.3.1</span> Missing fields &amp; type mismatch</h4>
 <div class="outline-text-4" id="text-3-3-1">
 <p>
-Missing fields or type mismatch (only an object is presented when a list is expected, for example) are regularized by applying the coercion rules described in <a href="#orgc5452ff">3.2</a>.
+Missing fields or type mismatch (only an object is presented when a list is expected, for example) are regularized by applying the coercion rules described in <a href="#org98c1260">3.2</a>.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org49db7e2" class="outline-4">
-<h4 id="org49db7e2"><span class="section-number-4">3.3.2</span> Invalid values</h4>
+<div id="outline-container-orgd4cd932" class="outline-4">
+<h4 id="orgd4cd932"><span class="section-number-4">3.3.2</span> Invalid values</h4>
 <div class="outline-text-4" id="text-3-3-2">
 </div>
 <ol class="org-ol">
-<li><a id="org2a05ed7"></a>Invalid values of the "contentType" fields<br />
+<li><a id="org4500752"></a>Invalid values of the "contentType" fields<br />
 <div class="outline-text-5" id="text-3-3-2-1">
 <p>
 When a message's "contentType" field contains values other than "one", "multi", "message" and "multimsg" (e.g. other string literals, or even other literals like boolean values and objects), it's considered to be "one" regardless of the value itself.
@@ -1074,7 +1074,7 @@ When a message's "contentType" field contains values other than "one", "multi", 
 </div>
 </li>
 
-<li><a id="org48b88dd"></a>Invalid values of the "messageType" fields<br />
+<li><a id="org61df383"></a>Invalid values of the "messageType" fields<br />
 <div class="outline-text-5" id="text-3-3-2-2">
 <p>
 When a message's "messageType" field contains values other than "", "greeting", "request" and "response", it's considered to be "" regardless of the value itself. i.e. any invalid TProtocol messages are (and should be considered as) NIL messages by default.
@@ -1087,7 +1087,7 @@ When a message's "messageType" field contains values other than "", "greeting", 
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2018-06-12 二 20:35</p>
+<p class="date">Created: 2018-06-12 二 23:02</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>
